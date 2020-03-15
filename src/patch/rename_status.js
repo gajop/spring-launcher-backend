@@ -1,33 +1,33 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const Repository = require('../models/repository')
+const Repository = require('../models/repository');
 
 if (require.main === module) {
-	applyPatch()
+	applyPatch();
 }
 
-async function applyPatch() {
+async function applyPatch () {
 	try {
-		await mongoose.connect('mongodb://localhost:27017/spring-launcher')
+		await mongoose.connect('mongodb://localhost:27017/spring-launcher');
 	} catch (err) {
-		console.error('Connection failed')
-		console.error(err)
-		return
+		console.error('Connection failed');
+		console.error(err);
+		return;
 	}
-	console.log('Applying status rename patch for succeed...')
+	console.log('Applying status rename patch for succeed...');
 	await updateSucceed();
-	console.log('Applying status rename patch for failed...')
+	console.log('Applying status rename patch for failed...');
 	await updateFailed();
-	process.exit()
+	process.exit();
 }
 
-async function updateSucceed() {
-	while (true) {
+async function updateSucceed () {
+	while (true) { // eslint-disable-line no-constant-condition
 		try {
-			const query = { 'builds.build_info.status': 'succeed' }
+			const query = { 'builds.build_info.status': 'succeed' };
 			let repo = await Repository.findOne(
 				query
-			).exec()
+			).exec();
 			if (repo == null) {
 				return;
 			}
@@ -35,29 +35,29 @@ async function updateSucceed() {
 				if (build.build_info.status !== 'succeed') {
 					continue;
 				}
-				console.log(`Updating build: ${build.id} for repository: ${repo.full_name}`)
-				const query = { 'builds._id': build._id }
+				console.log(`Updating build: ${build.id} for repository: ${repo.full_name}`);
+				const query = { 'builds._id': build._id };
 				const update = {
 					$set: {
-						'builds.$.build_info.status': 'success',
+						'builds.$.build_info.status': 'success'
 					}
-				}
-				await Repository.findOneAndUpdate(query, update).exec()
+				};
+				await Repository.findOneAndUpdate(query, update).exec();
 			}
 		} catch (err) {
-			console.error(err)
+			console.error(err);
 			return;
 		}
 	}
 }
 
-async function updateFailed() {
-	while (true) {
+async function updateFailed () {
+	while (true) { // eslint-disable-line no-constant-condition
 		try {
-			const query = { 'builds.build_info.status': 'failed' }
+			const query = { 'builds.build_info.status': 'failed' };
 			let repo = await Repository.findOne(
 				query
-			).exec()
+			).exec();
 			if (repo == null) {
 				return;
 			}
@@ -65,17 +65,17 @@ async function updateFailed() {
 				if (build.build_info.status !== 'failed') {
 					continue;
 				}
-				console.log(`Updating build: ${build.id} for repository: ${repo.full_name}`)
-				const query = { 'builds._id': build._id }
+				console.log(`Updating build: ${build.id} for repository: ${repo.full_name}`);
+				const query = { 'builds._id': build._id };
 				const update = {
 					$set: {
-						'builds.$.build_info.status': 'failure',
+						'builds.$.build_info.status': 'failure'
 					}
-				}
-				await Repository.findOneAndUpdate(query, update).exec()
+				};
+				await Repository.findOneAndUpdate(query, update).exec();
 			}
 		} catch (err) {
-			console.error(err)
+			console.error(err);
 			return;
 		}
 	}

@@ -1,5 +1,5 @@
-const builder = require('./builder')
+const builder = require('./builder');
 
 if (require.main === module) {
-  builder.runBuilder()
+	builder.runBuilder();
 }

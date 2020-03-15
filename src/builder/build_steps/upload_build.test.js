@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-const { uploadBuild } = require('./upload_build')
+// const { uploadBuild } = require('./upload_build');
 
 test('ok-upload-build-1', () => {
-  // uploadBuild
-})
+	// uploadBuild
+});

@@ -1,10 +1,10 @@
-'use strict'
+'use strict';
 
-const { updatePackageInfo } = require('./update_package_info')
+const { updatePackageInfo } = require('./update_package_info');
 
 test('ok-update-1', () => {
-  const build = {}
-  updatePackageInfo(build, {
-    title: 'TestTitle'
-  })
-})
+	const build = {};
+	updatePackageInfo(build, {
+		title: 'TestTitle'
+	});
+});

@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-const { clone } = require('./clone')
+//  const { clone } = require('./clone');
 
 test('ok-clone-1', () => {
 
-})
+});
