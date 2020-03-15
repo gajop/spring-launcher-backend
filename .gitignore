@@ -1,1 +1,14 @@
-.vscode*
+# Electron & Node Directories
+node_modules
+dist
+
+# Electron & Node files
+*.tgz
+*.log
+
+# spring-launcher downloads
+game_package
+data
+
+# spring-launcher temporary files
+Settings
