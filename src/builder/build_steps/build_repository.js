@@ -13,7 +13,7 @@ function buildRepository (repoDir, launcherDir, buildDir, buildTypes) {
 	copyIfExists(path.join(repoDir, 'dist_cfg/build'), path.join(buildDir, 'build'));
 	fs.removeSync(path.join(buildDir, 'src/bin'));
 	fs.copySync(path.join(repoDir, 'package.json'), path.join(buildDir, 'package.json'));
-	execSync('npm install', { cwd: buildDir });
+	execSync('npm ci', { cwd: buildDir });
 	if (buildTypes.includes('linux')) {
 		execSync('npm run build-linux', { cwd: buildDir });
 	}

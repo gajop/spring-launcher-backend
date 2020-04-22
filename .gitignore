@@ -12,3 +12,5 @@ data
 
 # spring-launcher temporary files
 Settings
+
+.env
