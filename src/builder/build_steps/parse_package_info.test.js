@@ -5,7 +5,7 @@ const path = require('path');
 
 const { partialClone } = require('./partial_clone');
 const { clone } = require('./clone');
-const { createPackagejsonFromGit } = require('./create_packagejson');
+const { createPackagejson, getVersionFromGit } = require('./create_packagejson');
 const { parsePackageInfo } = require('./parse_package_info');
 
 var TEST_DIR;
@@ -21,10 +21,16 @@ afterEach(() => {
 test('ok-parse-package-info-1', () => {
 	const repoDir = path.join(TEST_DIR, 'repo');
 	const launcherDir = path.join(TEST_DIR, 'launcher');
+	const repoFullName = 'test-repo';
 
 	partialClone('https://github.com/gajop/test-repo.git', repoDir, 'dist_cfg');
 	clone('https://github.com/gajop/spring-launcher.git', launcherDir);
-	createPackagejsonFromGit(launcherDir, repoDir, 'test-repo');
+
+	console.log('Creating package.json...');
+	const version = getVersionFromGit(repoDir);
+	console.log(`Version: ${version}`);
+	createPackagejson(launcherDir, repoDir, repoFullName, version);
+
 	const packageInfo = parsePackageInfo(repoDir);
 	for (const downloadLink of packageInfo.downloadLinks) {
 		downloadLink.link = `gajop/test-repo/${downloadLink.link}`;

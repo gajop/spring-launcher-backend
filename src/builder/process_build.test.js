@@ -15,8 +15,8 @@ afterEach(() => {
 	fs.removeSync(TEST_DIR);
 });
 
-test('ok-build-1', () => {
-	processBuild('test-repo',
+test('process-build-1', () => {
+	processBuild('gajop/test-repo',
 		'https://github.com/gajop/test-repo.git',
 		path.join(TEST_DIR, 'repo'),
 		path.join(TEST_DIR, 'build')

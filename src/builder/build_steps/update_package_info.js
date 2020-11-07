@@ -1,3 +1,5 @@
+'use strict';
+
 const Repository = require('../../models/repository');
 
 async function updatePackageInfo (build, packageInfo) {

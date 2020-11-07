@@ -1,3 +1,5 @@
+'use strict';
+
 const mongoose = require('mongoose');
 
 const Repository = require('../models/repository');
@@ -91,7 +93,8 @@ async function runQueries () {
 
 	try {
 		const gitUrl = `https://github.com/${repo.full_name}.git`;
-		const packageInfo = processBuild(repo.full_name, gitUrl, 'repo', 'build');
+		const buildInfo = processBuild(repo.full_name, gitUrl, 'repo', 'build');
+		const packageInfo = buildInfo.packageInfo;
 		updatePackageInfo(targetBuild, packageInfo);
 		{
 			const query = { 'builds._id': targetBuild._id };

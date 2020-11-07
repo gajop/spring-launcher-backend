@@ -1,9 +1,17 @@
+'use strict';
+
 const { execSync } = require('child_process');
 const fs = require('fs-extra');
 const path = require('path');
 
-function buildRepository (repoDir, launcherDir, buildDir, buildTypes) {
+function buildRepository (repoDir, launcherDir, buildDir, buildInfo) {
 	console.log('Starting the build...');
+
+	const packageInfo = buildInfo.packageInfo;
+	const version = buildInfo.version;
+	const buildTypes = packageInfo.buildTypes;
+	const artifactBaseNameWithVersion = `${packageInfo.artifactBaseName}-${version}`;
+
 	fs.removeSync(buildDir);
 	fs.ensureDirSync(buildDir);
 	fs.copySync(launcherDir, buildDir);
@@ -19,13 +27,10 @@ function buildRepository (repoDir, launcherDir, buildDir, buildTypes) {
 		execSync('npm run build-linux', { cwd: buildDir });
 	}
 	if (buildTypes.includes('windows-portable')) {
-		const configStr = fs.readFileSync(`${buildDir}/src/config.json`);
-		const config = JSON.parse(configStr);
-
 		execSync('npm run build-win-portable', { cwd: buildDir });
 		fs.moveSync(
-			path.join(buildDir, `dist/${config.title}.exe`),
-			path.join(buildDir, `dist/${config.title}-portable.exe`)
+			path.join(buildDir, `dist/${artifactBaseNameWithVersion}.exe`),
+			path.join(buildDir, `dist/${artifactBaseNameWithVersion}-portable.exe`)
 		);
 	}
 	if (buildTypes.includes('windows')) {

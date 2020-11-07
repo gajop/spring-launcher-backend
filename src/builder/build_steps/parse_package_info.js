@@ -8,7 +8,7 @@ function parsePackageInfo (repoDir) {
 	const config = JSON.parse(configStr);
 	assert(config.title != null, 'Missing config title');
 
-	var hasPortable = false;
+	let hasPortable = false;
 	for (const setup of config.setups) {
 		if (setup.package && setup.package.portable === true) {
 			hasPortable = true;
@@ -16,20 +16,22 @@ function parsePackageInfo (repoDir) {
 		}
 	}
 
-	var buildTypes = ['windows', 'linux'];
+	let buildTypes = ['windows', 'linux'];
 	if (hasPortable) {
 		buildTypes.push('windows-portable');
 	}
 
-	var downloadLinks = [];
+	const artifactBaseName = config.title;
+
+	let downloadLinks = [];
 	for (const buildType of buildTypes) {
-		var link = '';
+		let link = '';
 		if (buildType === 'linux') {
-			link = `${config.title}.AppImage`;
+			link = `${artifactBaseName}.AppImage`;
 		} else if (buildType === 'windows-portable') {
-			link = `${config.title}-portable.exe`;
+			link = `${artifactBaseName}-portable.exe`;
 		} else if (buildType === 'windows') {
-			link = `${config.title}.exe`;
+			link = `${artifactBaseName}.exe`;
 		} else {
 			throw new `Unexpected buildType: ${buildType}`();
 		}
@@ -43,7 +45,8 @@ function parsePackageInfo (repoDir) {
 	return {
 		title: config.title,
 		buildTypes: buildTypes,
-		downloadLinks: downloadLinks
+		downloadLinks: downloadLinks,
+		artifactBaseName: artifactBaseName
 	};
 }
 

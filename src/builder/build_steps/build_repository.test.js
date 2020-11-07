@@ -3,16 +3,30 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const { partialClone } = require('./partial_clone');
-const { clone } = require('./clone');
-const { createPackagejsonFromGit } = require('./create_packagejson');
+const { prepareForBuild } = require('../process_build');
 const { buildRepository } = require('./build_repository');
-const { parsePackageInfo } = require('./parse_package_info');
 
-var TEST_DIR;
+let TEST_DIR;
+let repoDir;
+let launcherDir;
+let buildDir;
+let artifactBaseNameWithVersion;
+let buildInfo;
 
 beforeEach(() => {
 	TEST_DIR = fs.mkdtempSync('test');
+	const repoFullName = 'gajop/test-repo';
+	const repoPrefix = path.join(TEST_DIR, 'repo');
+	launcherDir = path.join(TEST_DIR, 'launcher');
+	buildDir = path.join(TEST_DIR, 'build');
+	repoDir = `${repoPrefix}/${repoFullName}`;
+
+	const gitUrl = `https://github.com/${repoFullName}.git`;
+
+	buildInfo = prepareForBuild(repoFullName, gitUrl, repoDir, launcherDir);
+	const version = buildInfo.version;
+	const packageInfo = buildInfo.packageInfo;
+	artifactBaseNameWithVersion = `${packageInfo.artifactBaseName}-${version}`;
 });
 
 afterEach(() => {
@@ -46,24 +60,18 @@ afterEach(() => {
 // 	expect(fs.existsSync(path.join(distDir, `${artifactBaseNameWithVersion}-portable.exe`))).toBe(true);
 // });
 
-test('ok-build-repo-3', () => {
-	const repoDir = path.join(TEST_DIR, 'repo');
-	const launcherDir = path.join(TEST_DIR, 'launcher');
-	const buildDir = path.join(TEST_DIR, 'build');
 
-	partialClone('https://github.com/gajop/test-repo.git', repoDir, 'dist_cfg');
-	clone('https://github.com/gajop/spring-launcher.git', launcherDir);
-	createPackagejsonFromGit(launcherDir, repoDir, 'test-repo');
-	const packageInfo = parsePackageInfo(repoDir);
-	buildRepository(repoDir, launcherDir, buildDir, packageInfo.buildTypes);
+test('ok-build-repo-all', () => {
+	expect(buildInfo.version != null).toBe(true);
+	buildRepository(repoDir, launcherDir, buildDir, buildInfo);
 
 	const distDir = path.join(buildDir, 'dist');
 	expect(fs.existsSync(path.join(distDir, 'latest-linux.yml'))).toBe(true);
-	expect(fs.existsSync(path.join(distDir, `${packageInfo.title}.AppImage`))).toBe(true);
+	expect(fs.existsSync(path.join(distDir, `${artifactBaseNameWithVersion}.AppImage`))).toBe(true);
 
 	expect(fs.existsSync(path.join(distDir, 'latest.yml'))).toBe(true);
-	expect(fs.existsSync(path.join(distDir, `${packageInfo.title}.exe`))).toBe(true);
-	expect(fs.existsSync(path.join(distDir, `${packageInfo.title}.exe.blockmap`))).toBe(true);
+	expect(fs.existsSync(path.join(distDir, `${artifactBaseNameWithVersion}.exe`))).toBe(true);
+	expect(fs.existsSync(path.join(distDir, `${artifactBaseNameWithVersion}.exe.blockmap`))).toBe(true);
 
-	expect(fs.existsSync(path.join(distDir, `${packageInfo.title}-portable.exe`))).toBe(true);
+	expect(fs.existsSync(path.join(distDir, `${artifactBaseNameWithVersion}-portable.exe`))).toBe(true);
 });
