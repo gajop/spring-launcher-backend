@@ -1,6 +1,6 @@
 'use strict';
 
-const { partialClone, NoSuchPartialPathError, FailedToCloneError } = require('./partial_clone');
+const { partialClone } = require('./partial_clone');
 
 const fs = require('fs-extra');
 const path = require('path');
