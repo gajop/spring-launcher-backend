@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/gajop/spring-launcher-backend.svg?branch=master)](https://travis-ci.org/gajop/spring-launcher-backend)
+[![Discord](https://img.shields.io/discord/223585969956323328.svg)](https://discord.gg/c8hmDnr)
+
 ## Setup
 
 ```sh
