@@ -30,16 +30,16 @@ function uploadBuild (buildDir, repoFullName, buildInfo) {
 
 	// 2) Then we copy it to the non-versioned artifact
 	// Caching it for up to 24h. Not sure if this is wanted
-	execSync(`s3cmd cp ${dest}/${artifactBaseName}-${version}.exe ${dest}/${artifactBaseName}.exe --acl-public --add-header=Cache-Control:max-age=86400`);
-	execSync(`s3cmd cp ${dest}/${artifactBaseName}-${version}.exe.blockmap ${dest}/${artifactBaseName}.exe.blockmap --acl-public --add-header=Cache-Control:max-age=86400`);
-	execSync(`s3cmd cp ${dest}/${artifactBaseName}-${version}.AppImage ${dest}/${artifactBaseName}.AppImage --acl-public --add-header=Cache-Control:max-age=86400`);
+	execSync(`s3cmd cp "${dest}/${artifactBaseName}-${version}.exe" "${dest}/${artifactBaseName}.exe" --acl-public --add-header=Cache-Control:max-age=86400`);
+	execSync(`s3cmd cp "${dest}/${artifactBaseName}-${version}.exe.blockmap" "${dest}/${artifactBaseName}.exe.blockmap" --acl-public --add-header=Cache-Control:max-age=86400`);
+	execSync(`s3cmd cp "${dest}/${artifactBaseName}-${version}.AppImage" "${dest}/${artifactBaseName}.AppImage" --acl-public --add-header=Cache-Control:max-age=86400`);
 	if (hasPortable) {
-		execSync(`s3cmd cp ${dest}/${artifactBaseName}-${version}-portable.exe ${dest}/${artifactBaseName}-portable.exe --acl-public --add-header=Cache-Control:max-age=86400`);
+		execSync(`s3cmd cp "${dest}/${artifactBaseName}-${version}-portable.exe" "${dest}/${artifactBaseName}-portable.exe" --acl-public --add-header=Cache-Control:max-age=86400`);
 	}
 
 	// 3) Lastly we update the registry
 	console.log('Updating latest registry...');
-	execSync(`s3cmd put ${buildDir}/dist/*.yml ${dest}/ --recursive --acl-public --add-header=Cache-Control:max-age=86400`);
+	execSync(`s3cmd put ${buildDir}/dist/*.yml "${dest}/" --recursive --acl-public --add-header=Cache-Control:max-age=86400`);
 }
 
 module.exports = {
