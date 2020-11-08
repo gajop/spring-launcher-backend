@@ -13,9 +13,9 @@ function uploadBuild (buildDir, repoFullName, buildInfo) {
 	console.log('Uploading the build...');
 
 	let files = [
-		`${buildDir}/dist/${artifactBaseName}-${version}.exe`,
-		`${buildDir}/dist/${artifactBaseName}-${version}.exe.blockmap`,
-		`${buildDir}/dist/${artifactBaseName}-${version}.AppImage`
+		`"${buildDir}/dist/${artifactBaseName}-${version}.exe"`,
+		`"${buildDir}/dist/${artifactBaseName}-${version}.exe.blockmap"`,
+		`"${buildDir}/dist/${artifactBaseName}-${version}.AppImage"`
 	];
 	if (hasPortable) {
 		files.push(portablePath);
@@ -26,7 +26,7 @@ function uploadBuild (buildDir, repoFullName, buildInfo) {
 
 	console.log(`Copying ${files} to ${dest}...`);
 	// 1) First we push the versioned artifact
-	execSync(`s3cmd put ${files} ${dest}/ --recursive --acl-public`);
+	execSync(`s3cmd put ${files} "${dest}/" --recursive --acl-public`);
 
 	// 2) Then we copy it to the non-versioned artifact
 	// Caching it for up to 24h. Not sure if this is wanted
