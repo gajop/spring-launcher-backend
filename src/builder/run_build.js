@@ -8,13 +8,17 @@ if (require.main === module) {
 		console.log('Missing GitHub repository name');
 		process.exit(-1);
 	}
+	let useGenericBackend = true;
+	if (args.length >= 4) {
+		useGenericBackend = args[3] != '--no-generic-backend';
+	}
 
 	const repoFullName = args[2];
-	runBuild(repoFullName);
+	runBuild(repoFullName, useGenericBackend);
 }
 
 
-function runBuild(repoFullName) {
+function runBuild(repoFullName, useGenericBackend) {
 	const buildPrefix = 'build';
 	const repoPrefix = 'repo';
 
@@ -26,7 +30,7 @@ function runBuild(repoFullName) {
 
 	console.log(`Making build for ${gitUrl}...`);
 
-	makeBuild(repoFullName, gitUrl, repoDir, launcherDir, buildDir);
+	makeBuild(repoFullName, gitUrl, repoDir, launcherDir, buildDir, useGenericBackend);
 }
 
 module.exports = {
