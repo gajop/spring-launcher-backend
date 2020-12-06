@@ -4,7 +4,7 @@ const { execSync } = require('child_process');
 const fs = require('fs-extra');
 const path = require('path');
 
-function buildRepository (repoDir, launcherDir, buildDir, buildInfo) {
+function buildRepository (repoDir, launcherDir, buildDir, buildInfo, shouldPublish) {
 	console.log('Starting the build...');
 
 	const packageInfo = buildInfo.packageInfo;
@@ -24,7 +24,9 @@ function buildRepository (repoDir, launcherDir, buildDir, buildInfo) {
 	execSync('npm install', { cwd: buildDir });
 	execSync('npm ci', { cwd: buildDir });
 	if (buildTypes.includes('linux')) {
-		execSync('npm run build-linux', { cwd: buildDir });
+		if (shouldPublish) {
+			execSync(`npm run build-linux ${shouldPublish ? '-- --publish always' : ''}`, { cwd: buildDir });
+		}
 	}
 	if (buildTypes.includes('windows-portable')) {
 		execSync('npm run build-win-portable', { cwd: buildDir });
@@ -34,7 +36,7 @@ function buildRepository (repoDir, launcherDir, buildDir, buildInfo) {
 		);
 	}
 	if (buildTypes.includes('windows')) {
-		execSync('npm run build-win', { cwd: buildDir });
+		execSync(`npm run build-win ${shouldPublish ? '-- --publish always' : ''}`, { cwd: buildDir });
 	}
 }
 

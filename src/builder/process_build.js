@@ -19,7 +19,7 @@ function processBuild (repoFullName, gitUrl, repoPrefix, buildPrefix) {
 
 function makeBuild (repoFullName, gitUrl, repoDir, launcherDir, buildDir, useGenericBackend) {
 	const buildInfo = prepareForBuild(repoFullName, gitUrl, repoDir, launcherDir, useGenericBackend);
-	buildRepository(repoDir, launcherDir, buildDir, buildInfo);
+	buildRepository(repoDir, launcherDir, buildDir, buildInfo, !useGenericBackend);
 	return buildInfo;
 }
 
