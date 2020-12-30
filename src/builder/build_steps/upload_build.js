@@ -7,7 +7,7 @@ function uploadBuild (buildDir, repoFullName, buildInfo) {
 	const version = buildInfo.version;
 	const artifactBaseName = buildInfo.packageInfo.artifactBaseName;
 
-	const portablePath = `${buildDir}/dist/${artifactBaseName}-${version}-portable.exe`;
+	const portablePath = `"${buildDir}/dist/${artifactBaseName}-${version}-portable.exe"`;
 	const hasPortable = fs.existsSync(portablePath);
 
 	console.log('Uploading the build...');
