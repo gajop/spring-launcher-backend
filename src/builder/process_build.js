@@ -12,7 +12,7 @@ function processBuild (repoFullName, gitUrl, repoPrefix, buildPrefix) {
 	const repoDir = `${repoPrefix}/${repoFullName}`;
 	const launcherDir = `${repoPrefix}/spring-launcher`;
 
-	const buildInfo = makeBuild(repoFullName, gitUrl, repoDir, launcherDir, buildDir);
+	const buildInfo = makeBuild(repoFullName, gitUrl, repoDir, launcherDir, buildDir, true);
 	uploadBuild(buildDir, repoFullName, buildInfo);
 	return buildInfo;
 }
