@@ -9,6 +9,7 @@ dist
 # spring-launcher downloads
 game_package
 data
+build
 
 # spring-launcher temporary files
 Settings

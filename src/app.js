@@ -34,6 +34,7 @@ module.exports = app => {
 	router.use('/github', require('./routes/github'));
 	router.use('/repos', require('./routes/repos'));
 	router.use('/user', require('./routes/user'));
+	router.use('/versions', require('./routes/versions'));
 
 	const githubAppRepository = require('./routes/github_app');
 	githubAppRepository(app);
