@@ -94,7 +94,7 @@ async function runQueries() {
 			await Repository.findOneAndUpdate(query, update).exec();
 		}
 
-		return;
+		return false;
 	}
 
 	{

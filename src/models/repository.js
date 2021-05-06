@@ -6,6 +6,8 @@ module.exports = mongoose.model('Repository', mongoose.Schema({
 	full_name: { type: String, required: true },
 	name: { type: String, required: false },
 
+	disabled: { type: Boolean, required: false },
+
 	// dist_cfg/config.json
 	image_url: { type: String, required: false },
 	site_url: { type: String, required: false },
