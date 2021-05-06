@@ -7,7 +7,7 @@ const Repository = require('../models/repository');
 const { updatePackageInfo } = require('./build_steps/update_package_info');
 const { processBuild } = require('./process_build');
 
-async function runBuilder () {
+async function runBuilder() {
 	try {
 		await mongoose.connect('mongodb://localhost:27017/spring-launcher');
 	} catch (err) {
@@ -27,7 +27,7 @@ async function runBuilder () {
 	}
 }
 
-async function runQueries () {
+async function runQueries() {
 	let targetBuild = null;
 	let repo = null;
 	try {
@@ -80,6 +80,23 @@ async function runQueries () {
 
 	console.log(`One repository queued: ${repo.full_name}`);
 	console.log(targetBuild);
+
+	if (repo.disabled) {
+		console.log('Reposity is disabled, exiting');
+		{
+			const query = { 'builds._id': targetBuild._id };
+			const update = {
+				$set: {
+					'builds.$.build_info.status': 'disabled',
+					'builds.$.build_info.started_time': Date.now()
+				}
+			};
+			await Repository.findOneAndUpdate(query, update).exec();
+		}
+
+		return;
+	}
+
 	{
 		const query = { 'builds._id': targetBuild._id };
 		const update = {
@@ -115,11 +132,11 @@ async function runQueries () {
 	return true;
 }
 
-function wait (milleseconds) {
+function wait(milleseconds) {
 	return new Promise(resolve => setTimeout(resolve, milleseconds));
 }
 
-async function reportBuildFailure (build, errMsg) {
+async function reportBuildFailure(build, errMsg) {
 	const query = { 'builds._id': build._id };
 	const update = {
 		$set: {

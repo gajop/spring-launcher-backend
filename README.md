@@ -4,6 +4,15 @@
 ## Setup
 
 ```sh
+
+# server
+sudo apt-install mongodb
+sudo systemctl enable mongodb
+sudo systemctl start mongodb
+
+# builder and s3 uploader
+sudo apt-install wine s3cmd mono-complete
+
 # Install dependencies
 npm install
 
